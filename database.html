@@ -1,0 +1,217 @@
+<!doctypeHTML>
+<html>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> 
+    <link href="https://fonts.googleapis.com/css?family=Sanchez|Varela+Round" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .navbar {
+                margin-bottom: 0;
+                background-color: #ffcccc;
+                z-index: 9999;
+                border: 0;
+                font-size: 12px !important;
+                line-height: 1.42857143 !important;
+                letter-spacing: 4px;
+                border-radius: 0;
+            }
+
+            .navbar li a, .navbar .navbar-brand {
+                color: #fff !important;
+            }
+
+            .navbar-nav li a:hover, .navbar-nav li.active a {
+                color: #ffcccc !important;
+                background-color: #fff !important;
+            }
+
+            .navbar-default .navbar-toggle {
+                border-color: transparent;
+                color: #fff !important;
+            }
+
+            .jumbotron {
+                color: #fff;
+                background-color: #ffcccc;
+            }
+            button {
+                border-radius: 8px;
+            }
+
+            .card {
+                width: 300px;
+                margin: 0px auto;
+                font-family: 'Sanchez', serif;
+                display: inline-block;
+                border-radius: 10px;
+                border-style: solid;
+                border-width: 3px;
+                box-shadow:#a39292 5px 5px 5px;
+            }
+
+            h1 {
+                font-family: 'Varela Round', sans-serif;
+            }
+
+            p,a {
+                font-family: 'Sanchez', serif;
+                font-size:14pt;
+            }
+
+            #json {
+                height: 35%;
+                width:30%;
+                margin: 10px;
+                transition: transform .2s;
+                border-radius:10px;
+                box-shadow:black 5px 5px 5px;
+            }
+
+            #json:hover{
+                transform: scale(1.5);
+            }
+
+            #cc {
+                padding: 1px;
+
+                background-color: #ffcccc;
+                margin: 0px auto;
+                color: #fff;
+                font-family: 'Varela Round', sans-serif;
+            }
+            
+            .bgdark {
+                background-color: #f6f6f6;
+            }
+
+            .logo-smallest {
+                color: #ffcccc;
+                font-size: 25px;
+            }
+
+            .container-fluid {
+                font-family: 'Sanchez', serif;
+                padding: 50px 40px;
+                background-color: #fff;
+            }
+
+
+    </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+        </script>
+   
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js">
+        </script>
+ 
+        <script type="text/template" id="ctmp">
+            <div class="card">
+                    <h2 id="cc"><b>Complaint:</b> {{issue}} </h2>
+                    <h3><b>Company Name:</b> {{company}} </h3>
+                    <p><b>Company Response to Consumer:</b> {{company_response}}</p>
+                    <p><b>Timely Response?</b> {{timely}}</p>
+                    <marquee scrollamount="4px"><b>Date Received:</b> {{date_received}} <b>Consumer State:</b> {{state}}</marquee>
+                </div>
+        </script>
+ 
+        <script>
+            var data;
+            function search(){
+                $.getJSON("https://data.consumerfinance.gov/resource/jhzv-w97w.json",function(results){
+                    data = results;
+                });
+            }
+ 
+            function displayComplaint(){
+                var build = "";
+                var output = document.getElementById("output");
+                var comp = document.getElementById("comp");
+                var tmp = document.getElementById("ctmp").innerHTML;
+                var count = 0;
+ 
+                for(var index = 0; index < data.length; index++){
+                    if (data[index].hasOwnProperty('company')) {
+                    if(data[index].company.toLowerCase().indexOf(comp.value.toLowerCase()) != -1){
+                        data[index].date_received = data[index].date_received.substring(0,10);
+                        build += Mustache.render(tmp,data[index]);
+                        count += 1;
+                    }
+                }
+                }
+                    output.innerHTML = "<h1><b>Complaints: " + count + "</h1></b><br>" + build;
+            }
+                       
+        </script>
+
+    <script>
+        //Not my code, taken from W3Schools simply to make the site look better.
+        $(document).ready(function(){
+        $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+
+        if (this.hash !== "") {
+
+            event.preventDefault();
+
+         var hash = this.hash;
+
+            $('html, body').animate({
+            scrollTop: $(hash).offset().top
+            }, 900, function(){
+
+            window.location.hash = hash;
+            });
+            }
+        });
+        })
+    </script>
+
+    <body id="MyPage" onload="search()">
+
+        <!--Navigation Bar-->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="database.html">CFPB DATABASE</a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="myNavbar">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="index.html#contact">CONTACT</a></li>
+                            <li><a href="index.html#disclaimer">DISCLAIMER</a></li>
+                        </ul>
+                    </div>
+                   </div>
+               </nav>
+
+        <!--Header-->
+        <div id="header" class="jumbotron text-center">
+            <h1>Consumer Complaint Database for Financial Protection</h1>
+        </div>
+
+        <!--Description-->
+        <div id="description" class="container-fluid text-center">
+            <img src="https://i.imgur.com/0858y8U.png" id="json"height="25%" weight="30%">
+            <h2>About the data</h2>
+            <p>This dataset is a collection of complaints from the Consumer Financial Protection's Complaint Database
+            including a range of consumer financial products and services, and then sent to companies for response.
+            The database updates daily, and contains certain information for each complaint, including the source
+            of the complaint, the date of submission, and the company the complaint was sent to in response.</p>
+            <input type="text" id="comp" placeholder="Search by Company">
+            <button onclick="displayComplaint()"> Display</button>
+        </div>
+
+        <!--Data Output-->
+        <div id="output" class="text-center">
+        </div>
+
+        <!--Footer-->
+        <footer class="container-fluid text-center bgdark">
+            <a href="#MyPage" title="To Top">
+            <span class="glyphicon glyphicon-chevron-up logo-smallest"></span>
+            </a>
+        </footer>
+        
+    </body>
+</html>
