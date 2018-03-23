@@ -102,7 +102,24 @@
    
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js">
         </script>
- 
+        
+        <script>
+        //Not my code, taken from W3Schools simply to make the site look better.
+        $(document).ready(function(){
+        $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+        if (this.hash !== "") {
+            event.preventDefault();
+         var hash = this.hash;
+            $('html, body').animate({
+            scrollTop: $(hash).offset().top
+            }, 900, function(){
+            window.location.hash = hash;
+            });
+            }
+        });
+        })
+        </script>
+        
         <script type="text/template" id="ctmp">
             <div class="card">
                     <h2 id="cc"><b>Complaint:</b> {{issue}} </h2>
