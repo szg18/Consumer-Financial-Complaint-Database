@@ -1,5 +1,6 @@
 <!doctypeHTML>
 <html>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> 
     <link href="https://fonts.googleapis.com/css?family=Sanchez|Varela+Round" rel="stylesheet">
@@ -15,21 +16,17 @@
                 letter-spacing: 4px;
                 border-radius: 0;
             }
-
             .navbar li a, .navbar .navbar-brand {
                 color: #fff !important;
             }
-
             .navbar-nav li a:hover, .navbar-nav li.active a {
                 color: #ffcccc !important;
                 background-color: #fff !important;
             }
-
             .navbar-default .navbar-toggle {
                 border-color: transparent;
                 color: #fff !important;
             }
-
             .jumbotron {
                 color: #fff;
                 background-color: #ffcccc;
@@ -37,7 +34,10 @@
             button {
                 border-radius: 8px;
             }
-
+            select {
+                border-radius: 8px;
+                ;
+            }
             .card {
                 width: 300px;
                 margin: 0px auto;
@@ -48,16 +48,13 @@
                 border-width: 3px;
                 box-shadow:#a39292 5px 5px 5px;
             }
-
             h1 {
                 font-family: 'Varela Round', sans-serif;
             }
-
             p,a {
                 font-family: 'Sanchez', serif;
                 font-size:14pt;
             }
-
             #json {
                 height: 35%;
                 width:30%;
@@ -66,14 +63,11 @@
                 border-radius:10px;
                 box-shadow:black 5px 5px 5px;
             }
-
             #json:hover{
                 transform: scale(1.5);
             }
-
             #cc {
                 padding: 1px;
-
                 background-color: #ffcccc;
                 margin: 0px auto;
                 color: #fff;
@@ -83,19 +77,15 @@
             .bgdark {
                 background-color: #f6f6f6;
             }
-
             .logo-smallest {
                 color: #ffcccc;
                 font-size: 25px;
             }
-
             .container-fluid {
                 font-family: 'Sanchez', serif;
                 padding: 50px 40px;
                 background-color: #fff;
             }
-
-
     </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
         </script>
@@ -120,27 +110,29 @@
                     data = results;
                 });
             }
- 
+            var property = $('#search-by').val();
+
             function displayComplaint(){
+                property = $('#search-by').val();
                 var build = "";
                 var output = document.getElementById("output");
-                var comp = document.getElementById("comp");
                 var tmp = document.getElementById("ctmp").innerHTML;
                 var count = 0;
- 
-                for(var index = 0; index < data.length; index++){
-                    if (data[index].hasOwnProperty('company')) {
-                    if(data[index].company.toLowerCase().indexOf(comp.value.toLowerCase()) != -1){
-                        data[index].date_received = data[index].date_received.substring(0,10);
-                        build += Mustache.render(tmp,data[index]);
-                        count += 1;
+
+                for (index = 0; index < data.length; index++) {
+                    if (data[index].hasOwnProperty(property)) {
+                        if(data[index]
+                        [property].toLowerCase().indexOf(com.value.toLowerCase()) != -1){
+                            data[index].date_received = data[index].date_received.substring(0,10);
+                            build += Mustache.render(tmp,data[index]);
+                            count += 1;
+                        }
                     }
                 }
-                }
-                    output.innerHTML = "<h1><b>Complaints: " + count + "</h1></b><br>" + build;
-            }
-                       
-        </script>
+                output.innerHTML = "<h1><b>Complaints: " + count + "</h1></b><br>" + build;
+            } 
+</script>
+
 
     <body id="MyPage" onload="search()">
 
@@ -176,8 +168,14 @@
             including a range of consumer financial products and services, and then sent to companies for response.
             The database updates daily, and contains certain information for each complaint, including the source
             of the complaint, the date of submission, and the company the complaint was sent to in response.</p>
-            <input type="text" id="comp" placeholder="Search by Company">
-            <button onclick="displayComplaint()"> Display</button>
+            <select id="search-by">
+                <option value="company">Company</option>
+                <option value="issue">Complaint</option>
+                <option value="state">State</option>
+                <option value="date_received">Date Received</option>
+            </select>
+            <input type="text" id="com" placeholder="Search by">
+            <button onclick="displayComplaint()">Search</button>
         </div>
 
         <!--Data Output-->
